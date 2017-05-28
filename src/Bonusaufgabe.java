@@ -74,7 +74,7 @@ public class Bonusaufgabe {
 			String t = hash;
 			t = reductionfunction(t, j);
 
-			// go to end value, max 1999 steps
+			// go to end value, max 2000 steps
 			while (j < K - 1) {
 				j++;
 				t = hashfunction(t);
