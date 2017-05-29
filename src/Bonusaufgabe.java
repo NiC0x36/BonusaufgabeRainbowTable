@@ -14,9 +14,9 @@ public class Bonusaufgabe {
 	private static Map<String, String> rainbowtable = new HashMap<String, String>();
 	private static MessageDigest md;
 
-	public static void main(String[] args) throws NoSuchAlgorithmException {	
+	public static void main(String[] args) throws NoSuchAlgorithmException {
 		md = MessageDigest.getInstance("MD5");
-		System.out.println("Start");
+		System.out.println("Creating rainbow table...");
 
 		// Timer (in ms) to see how long the creation of the rainbowtable took
 		long start = System.currentTimeMillis();
@@ -25,15 +25,22 @@ public class Bonusaufgabe {
 		long duration = System.currentTimeMillis() - start;
 		System.out.println("Rainbowtable in " + duration + "ms created");
 
-		String[] hashesToCheck = { "29c3eea3f305d6b823f562ac4be35217", "12e2feb5a0feccf82a8d4172a3bd51c3",
-				"437988e45a53c01e54d21e5dc4ae658a", "c0e9a2f2ae2b9300b6f7ef3e63807e84", "1d56a37fb6b08aa709fe90e12ca59e12" };
+		String[] hashesToCheck = { "1d56a37fb6b08aa709fe90e12ca59e12" };
 		for (int i = 0; i < hashesToCheck.length; i++) {
+			System.out.println("\nHash to search: " + hashesToCheck[i]);
+
 			// Timer (in ms) to see how long the"hacking" of the hash took
 			start = System.currentTimeMillis();
-			//checking the given hashes, using the created rainbowtable and the hash- & reductionfunction
-			findPlaintext(hashesToCheck[i]);
-			duration = System.currentTimeMillis() - start;
-			System.out.println("Password in " + duration + "ms hacked"); //TODO: output also when not found
+			// checking the given hashes, using the created rainbowtable and the
+			// hash- & reductionfunction
+			String result;
+			if ((result = findPlaintext(hashesToCheck[i])) != null) {
+				duration = System.currentTimeMillis() - start;
+				System.out.println("Password to hash \"" + hashesToCheck[i] + "\" is: \"" + result + "\"");
+				System.out.println("Password in " + duration + "ms hacked");
+			} else {
+				System.out.println("Password not found!");
+			}
 
 		}
 	}
@@ -65,10 +72,11 @@ public class Bonusaufgabe {
 
 	// finds the plaintext
 	// iterates from a given hash to find the corresponding plaintext
-	// if the corresponding plaintext was found, prints the hash and the plaintext
-	// if the corresponding plaintext could not be found, prints a "password not found"-message
-	private static void findPlaintext(String hash) {
-		System.out.println("\nHash to search: " + hash);
+	// if the corresponding plaintext was found, prints the hash and the
+	// plaintext
+	// if the corresponding plaintext could not be found, prints a
+	// "password not found"-message
+	private static String findPlaintext(String hash) {
 		for (int i = rainbowtable.size() - 1; i >= 0; i--) {
 			int j = i;
 			String t = hash;
@@ -90,13 +98,11 @@ public class Bonusaufgabe {
 				}
 				// compare given hash with hash of found plaintext
 				// if equal prints hash and plaintext
-				if (hashfunction(t).equals(hash)) {
-					System.out.println("Password to hash \"" + hash + "\" is: \"" + t + "\"");
-					return;
-				}
+				if (hashfunction(t).equals(hash))
+					return t;
 			}
 		}
-		System.out.println("Password not found!");
+		return null;
 	}
 
 	// hashfuntion used to hash the plaintext
