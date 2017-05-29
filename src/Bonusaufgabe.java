@@ -7,10 +7,10 @@ import java.security.*;
 public class Bonusaufgabe {
 	private static int N = 2000;
 	private static int K = 2000;
-	private static int L = 7; // Länge des Passworts
+	private static int L = 7; // length of the password
 	private static char[] Z = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
 			'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
-	// k -> endpunkt / v -> startpunkt
+	// k -> endpoint / v -> startpoint
 	private static Map<String, String> rainbowtable = new HashMap<String, String>();
 	private static MessageDigest md;
 
@@ -36,12 +36,15 @@ public class Bonusaufgabe {
 			String result;
 			if ((result = findPlaintext(hashesToCheck[i])) != null) {
 				duration = System.currentTimeMillis() - start;
+				// if the corresponding plaintext was found, prints the hash and the
+				// plaintext
 				System.out.println("Password to hash \"" + hashesToCheck[i] + "\" is: \"" + result + "\"");
 				System.out.println("Password in " + duration + "ms hacked");
 			} else {
+				// if the corresponding plaintext could not be found, prints a
+				// "password not found"-message
 				System.out.println("Password not found!");
 			}
-
 		}
 	}
 
@@ -72,10 +75,6 @@ public class Bonusaufgabe {
 
 	// finds the plaintext
 	// iterates from a given hash to find the corresponding plaintext
-	// if the corresponding plaintext was found, prints the hash and the
-	// plaintext
-	// if the corresponding plaintext could not be found, prints a
-	// "password not found"-message
 	private static String findPlaintext(String hash) {
 		for (int i = rainbowtable.size() - 1; i >= 0; i--) {
 			int j = i;
@@ -97,7 +96,6 @@ public class Bonusaufgabe {
 					t = reductionfunction(t, k);
 				}
 				// compare given hash with hash of found plaintext
-				// if equal prints hash and plaintext
 				if (hashfunction(t).equals(hash))
 					return t;
 			}
